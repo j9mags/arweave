@@ -1,0 +1,65 @@
+<% include ../partials/header %>
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Details</p>
+            <div class="list-group">
+                <li class="list-group-item active">Info 1</li>
+                <!-- <li class="list-group-item">Info 2</li>
+                <li class="list-group-item">Info 3</li> -->
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <!-- <img class="img-responsive" src="<%= document.image %> "> -->
+                <div class="caption-full">
+                    <!-- <h4 class="float-right"></h4> -->
+                    <h4><a><%= document.name + " " + document.lastname %></a></h4>
+                    <p><%= document.description %></p>
+                    <p><%= document.id %></p>
+                    <p>
+                        <em>Submitted by: <%= document.author.username %></em>
+                    </p>
+                    <% if(currentUser && document.author.equals(currentUser.username)  ){%>
+                        <a class="btn btn-warning" href="/documents/<%=document._id%>/edit">Edit</a>
+                        <form class="delete-form" action="/documents/<%=document._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                    <% }%>
+                </div>
+            </div>
+            <div class="jumbotron" id="commented">
+                <div class="text-right">
+                        <a class="btn btn-success" href="/documents/<%= document._id%>/transactions/new">Add New Transaction</a>
+                </div>
+                <hr>
+                <% document.transactions.forEach(function(transaction){ %>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="float-right"><strong><p>Amount: $<%= transaction.amount%></p></strong></span>
+                            <p>Transaction Type: <%= transaction.type%></p>
+                            <p>Reference #: <%= transaction.reference%></p>
+                            <p>Status: <%= transaction.status%></p>
+                            <p>Remarks: <%= transaction.remarks%></p>
+                            <br>
+                            <strong>Submitted by: <%= transaction.author.username %></strong>
+                            <br>
+                            <% if(currentUser && transaction.author.equals(currentUser.username)){%>
+                            <a class="btn btn-xs btn-warning" href="/documents/<%=document._id%>/transactions/<%=transaction._id%>/edit">Edit</a>
+                            <form class="delete-form" action="/documents/<%=document._id%>/transactions/<%=transaction._id%>?_method=DELETE" method="POST">
+                                <input type="Submit" class="btn btn-xs btn-danger" value="Delete">
+                            </form>
+                            <% }%>
+                           
+                        </div>
+                    </div>
+                <% });%>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %> 
